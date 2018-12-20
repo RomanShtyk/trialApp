@@ -1,40 +1,45 @@
 package com.example.rdsh.testapp.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.rdsh.testapp.Entities.Message;
-import com.example.rdsh.testapp.Entities.User;
-import com.example.rdsh.testapp.Fragments.Chat;
-import com.example.rdsh.testapp.Fragments.ChatList;
+import com.example.rdsh.testapp.EntitiesOLD.Message;
+import com.example.rdsh.testapp.EntitiesOLD.User;
+import com.example.rdsh.testapp.Fragments.ChatListFragment;
 import com.example.rdsh.testapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FragmentTransaction transaction;
-    private FragmentManager manager;
-    ChatList fragmentChatList;
-    Chat fragmentChat;
-    public static List<User> users = new ArrayList<>();
+    private ChatListFragment fragmentChatList;
+    public static final List<User> users = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        generateUsersChats(savedInstanceState);
+        fragmentChatList = new ChatListFragment();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, fragmentChatList).commit();
+        }
+
+    }
+
+    private void generateUsersChats(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             User friend1 = new User("friend1");
             User friend2 = new User("friend2");
-            String date = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+            @SuppressLint("SimpleDateFormat") String date = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
             Message message = new Message("Message 1 true", date, true);
             Message message2 = new Message("Hi!! false", date, false);
             Message message3 = new Message("Message 2 false", date, false);
@@ -66,31 +71,18 @@ public class MainActivity extends AppCompatActivity {
             users.add(friend1);
             users.add(friend2);
         }
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            fragmentChatList = new ChatList();
-            manager = getSupportFragmentManager();
-            transaction = manager.beginTransaction();
-            transaction.add(R.id.container, fragmentChatList);
-            transaction.commit();
-        }
     }
-
-    //getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            fragmentChatList = new ChatList();
-            manager = getSupportFragmentManager();
-            transaction = manager.beginTransaction();
-            transaction.add(R.id.ChatListFragment, fragmentChatList);
-            transaction.commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.ChatListFragment, fragmentChatList).commit();
         }
     }
 
     public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
 

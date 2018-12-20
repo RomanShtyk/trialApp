@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -13,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:text="Name" />
+        android:text="@string/name"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/lastMessage"
@@ -25,7 +27,8 @@
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="10dp"
-        android:text="Hello, how are you??)))" />
+        android:text="@string/hello_how_are_you"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/time"
@@ -37,5 +40,6 @@
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/userName"
         android:layout_toRightOf="@+id/userName"
-        android:text="Time" />
+        android:text="@string/time"
+        tools:ignore="RtlHardcoded" />
 </RelativeLayout>

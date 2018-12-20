@@ -1,5 +1,6 @@
 package com.example.rdsh.testapp.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,21 +8,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.rdsh.testapp.Entities.User;
+import com.example.rdsh.testapp.EntitiesOLD.User;
 import com.example.rdsh.testapp.R;
 
 import java.util.List;
 
 public class ListChatAdapter extends BaseAdapter {
 
-    Context ctx;
-    LayoutInflater lInflater;
-    List<User> users;
+    private final LayoutInflater lInflater;
+    private final List<User> users;
 
     public ListChatAdapter(Context context, List<User> users) {
-        ctx = context;
         this.users = users;
-        lInflater = (LayoutInflater) ctx
+        lInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -40,6 +39,7 @@ public class ListChatAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -58,7 +58,7 @@ public class ListChatAdapter extends BaseAdapter {
         return view;
     }
 
-    User getUser(int position) {
+    private User getUser(int position) {
         return ((User) getItem(position));
     }
 }

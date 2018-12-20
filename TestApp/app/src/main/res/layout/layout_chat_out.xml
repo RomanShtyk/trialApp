@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -10,13 +11,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="54dp"
-        android:layout_marginRight="54dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
         android:background="@drawable/sent_holder"
         android:padding="8dp"
-        android:text="anysfsv"
-        android:textSize="12sp" />
+        android:text="@string/anysfsv"
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/time"
@@ -28,5 +30,6 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Time" />
+        android:text="@string/time"
+        tools:ignore="RtlHardcoded" />
 </RelativeLayout>

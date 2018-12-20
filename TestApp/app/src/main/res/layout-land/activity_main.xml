@@ -9,13 +9,14 @@
 
     <fragment
         android:id="@+id/ChatListFragment"
-        android:name="com.example.rdsh.testapp.Fragments.ChatList"
+        android:name="com.example.rdsh.testapp.Fragments.ChatListFragment"
         android:layout_width="287dp"
         android:layout_height="314dp"
         android:layout_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_chat_list" />
+        tools:layout="@layout/fragment_chat_list"
+        tools:ignore="InconsistentLayout" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/container2"
@@ -28,7 +29,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/ChatListFragment"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="InconsistentLayout">
 
         <TextView
             android:id="@+id/tvChooseChat"
@@ -36,7 +38,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Choose the chat"
+            android:text="@string/choose_the_chat"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
