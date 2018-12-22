@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.rdsh.testapp.EntitiesOLD.Message;
+import com.example.rdsh.testapp.Data.Message;
 import com.example.rdsh.testapp.R;
 
 import java.util.List;
@@ -42,16 +42,15 @@ public class MessageChatAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View view = convertView;
-        Message message = getMessage(position);
 
-        if (messages.get(position).getFromMe()) {
+        if (messages.get(position).getIsFromMe() == 1) {
             view = lInflater.inflate(R.layout.layout_chat_out, parent, false);
-            ((TextView) view.findViewById(R.id.message)).setText(message.getMessage());
-            ((TextView) view.findViewById(R.id.time)).setText(message.getTime());
-        } else if (!messages.get(position).getFromMe()) {
+            ((TextView) view.findViewById(R.id.message)).setText(messages.get(position).getMessage());
+            ((TextView) view.findViewById(R.id.time)).setText(messages.get(position).getTime());
+        } else if (messages.get(position).getIsFromMe() == 0) {
             view = lInflater.inflate(R.layout.layout_chat_in, parent, false);
-            ((TextView) view.findViewById(R.id.message)).setText(message.getMessage());
-            ((TextView) view.findViewById(R.id.time)).setText(message.getTime());
+            ((TextView) view.findViewById(R.id.message)).setText(messages.get(position).getMessage());
+            ((TextView) view.findViewById(R.id.time)).setText(messages.get(position).getTime());
         }
         return view;
     }
