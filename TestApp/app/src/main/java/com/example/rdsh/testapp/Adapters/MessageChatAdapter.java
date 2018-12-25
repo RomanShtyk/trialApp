@@ -15,12 +15,17 @@ import java.util.List;
 public class MessageChatAdapter extends BaseAdapter {
 
     private final LayoutInflater lInflater;
-    private final List<Message> messages;
+    private  List<Message> messages;
 
     public MessageChatAdapter(Context context, List<Message> messages) {
         this.messages = messages;
         lInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+    public void updateList(List<Message> messages){
+        this.messages.clear();
+        this.messages = messages;
+        this.notifyDataSetChanged();
     }
 
     @Override

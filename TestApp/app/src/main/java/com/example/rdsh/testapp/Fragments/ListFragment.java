@@ -10,28 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import com.example.rdsh.testapp.Activities.MainActivity;
 import com.example.rdsh.testapp.Adapters.ListAdapter;
-import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.R;
 
-import java.util.List;
 import java.util.Objects;
 
+import static com.example.rdsh.testapp.Activities.MainActivity.chatFragment;
 
 
 public class ListFragment extends Fragment {
 
-    private ChatFragment fragmentChat;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
-        List<User> users = MainActivity.myAppDatabase.daoUser().getAll();
 
-        fragmentChat = new ChatFragment();
-        ListAdapter listAdapter = new ListAdapter(view.getContext(), users);
+        ListAdapter listAdapter = new ListAdapter(view.getContext(), MainActivity.myAppDatabase.daoUser().getAll());
         ListView lvMain = view.findViewById(R.id.list_view);
         lvMain.setAdapter(listAdapter);
 
@@ -43,20 +38,21 @@ public class ListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     bundle.putInt("position", position);
-                    fragmentChat.setArguments(bundle);
+                    chatFragment.setArguments(bundle);
                     assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.container, fragmentChat).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).addToBackStack(null).commit();
                 } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     bundle.putInt("position", position);
-                    fragmentChat.setArguments(bundle);
-                    if (fragmentChat.isAdded()) {
+                    chatFragment.setArguments(bundle);
+                    if (chatFragment.isAdded()) {
                         assert getFragmentManager() != null;
-                        getFragmentManager().beginTransaction().remove(fragmentChat)
-                                .add(R.id.container2, fragmentChat).addToBackStack(null).commit();
+                        getFragmentManager().beginTransaction().remove(chatFragment)
+                                .add(R.id.containerLand, chatFragment).addToBackStack(null).commit();
                     } else {
+                        Objects.requireNonNull(getActivity()).findViewById(R.id.tvChooseChat).setVisibility(View.GONE);
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction()
-                                .add(R.id.container2, fragmentChat).addToBackStack(null).commit();
+                                .add(R.id.containerLand, chatFragment).addToBackStack(null).commit();
                     }
                 }
 
@@ -71,4 +67,12 @@ public class ListFragment extends Fragment {
         ((MainActivity) Objects.requireNonNull(getActivity()))
                 .setActionBarTitle("Chats");
     }
+
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+//            getFragmentManager();
+//        }
+//    }
 }

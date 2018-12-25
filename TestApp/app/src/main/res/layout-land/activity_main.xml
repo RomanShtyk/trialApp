@@ -7,19 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".Activities.MainActivity">
 
-    <fragment
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/ChatListFragment"
-        android:name="com.example.rdsh.testapp.Fragments.ListFragment"
         android:layout_width="287dp"
         android:layout_height="314dp"
         android:layout_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_chat_list"
-        tools:ignore="InconsistentLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/container2"
+        android:id="@+id/containerLand"
         android:name="com.example.rdsh.testapp.ChatList"
         android:layout_width="305dp"
         android:layout_height="match_parent"
