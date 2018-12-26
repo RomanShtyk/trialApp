@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,17 +20,14 @@ import android.widget.ListView;
 import com.example.rdsh.testapp.Activities.MainActivity;
 import com.example.rdsh.testapp.Adapters.MessageChatAdapter;
 import com.example.rdsh.testapp.Data.Message;
-import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import static com.example.rdsh.testapp.Activities.MainActivity.FALSE;
 import static com.example.rdsh.testapp.Activities.MainActivity.TRUE;
-import static com.example.rdsh.testapp.Activities.MainActivity.chatFragment;
 
 public class ChatFragment extends Fragment {
 
@@ -39,9 +35,9 @@ public class ChatFragment extends Fragment {
 
     private MessageChatAdapter messageChatAdapter;
 
-    EditText creatorEd;
+    private EditText creatorEd;
 
-    int finalItemPosition = -1;
+    private int finalItemPosition = -1;
 
 
     @Override
@@ -52,8 +48,8 @@ public class ChatFragment extends Fragment {
         int itemPosition = 0;
         if (getArguments() != null)
             // 13 because 1st id is 13(((
-            //itemPosition = getArguments().getInt("position") + 13;// pixel
-            itemPosition = getArguments().getInt("position") + 1; //samsung
+            itemPosition = getArguments().getInt("position") + 13;// pixel
+            //itemPosition = getArguments().getInt("position") + 1; //samsung
         title = MainActivity.myAppDatabase.daoUser().getName(itemPosition);
 
         messageChatAdapter = new MessageChatAdapter(view.getContext(), MainActivity
@@ -81,7 +77,7 @@ public class ChatFragment extends Fragment {
         });
 
         //notification test
-        final Runnable run = notificationSet(MainActivity.myAppDatabase.daoUser().getAll());
+        final Runnable run = notificationSet();
 
         Button testButton = view.findViewById(R.id.testButton);
         testButton.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +92,7 @@ public class ChatFragment extends Fragment {
     }
 
     @NonNull
-    private Runnable notificationSet(final List<User> users) {
+    private Runnable notificationSet() {
         final NotificationManager notificationManager = (NotificationManager) Objects
                 .requireNonNull(getActivity())
                 .getSystemService(Context.NOTIFICATION_SERVICE);

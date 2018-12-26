@@ -3,12 +3,9 @@ package com.example.rdsh.testapp.Activities;
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
 import android.content.res.Configuration;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
 import com.example.rdsh.testapp.Data.MyAppDatabase;
 import com.example.rdsh.testapp.Fragments.ChatFragment;
 import com.example.rdsh.testapp.Fragments.ListFragment;
@@ -29,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
-    public static ListFragment fragmentChatList;
+    private static ListFragment fragmentChatList;
     @SuppressLint("StaticFieldLeak")
     public static ChatFragment chatFragment;
 
