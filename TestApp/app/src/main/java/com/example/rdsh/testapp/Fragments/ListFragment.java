@@ -40,19 +40,19 @@ public class ListFragment extends Fragment {
                     bundle.putInt("position", position);
                     chatFragment.setArguments(bundle);
                     assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
                 } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     bundle.putInt("position", position);
                     chatFragment.setArguments(bundle);
                     if (chatFragment.isAdded()) {
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().remove(chatFragment)
-                                .add(R.id.containerLand, chatFragment).addToBackStack(null).commit();
+                                .add(R.id.container, chatFragment).addToBackStack(null).commit();
                     } else {
                         Objects.requireNonNull(getActivity()).findViewById(R.id.tvChooseChat).setVisibility(View.GONE);
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction()
-                                .add(R.id.containerLand, chatFragment).addToBackStack(null).commit();
+                                .add(R.id.container, chatFragment).addToBackStack(null).commit();
                     }
                 }
 
@@ -68,11 +68,4 @@ public class ListFragment extends Fragment {
                 .setActionBarTitle("Chats");
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-//            getFragmentManager();
-//        }
-//    }
 }

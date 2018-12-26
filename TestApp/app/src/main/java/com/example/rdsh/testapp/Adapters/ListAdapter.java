@@ -48,8 +48,8 @@ public class ListAdapter extends BaseAdapter {
         if (view == null) {
             view = lInflater.inflate(R.layout.layout_chat_list_item, parent, false);
         }
-       // int userId = position + 13;
-        int userId = position + 9;
+        //int userId = position + 13;   //pixel
+        int userId = position + 1; //samsung
         User user = getUser(position);
         user.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(userId));
 

@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.rdsh.testapp.Data.MyAppDatabase;
 import com.example.rdsh.testapp.Fragments.ChatFragment;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 .fallbackToDestructiveMigration().allowMainThreadQueries().build();
         //generateDB(savedInstanceState);
 
+
         if (savedInstanceState == null) {
             fragmentChatList = new ListFragment();
             chatFragment = new ChatFragment();
@@ -56,14 +59,16 @@ public class MainActivity extends AppCompatActivity {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.activity_main);
             getSupportFragmentManager().beginTransaction().remove(fragmentChatList).commit();
+            if (chatFragment.isAdded()) {
+                findViewById(R.id.tvChooseChat).setVisibility(View.GONE);
+                getSupportFragmentManager().beginTransaction().remove(chatFragment).commit();
+                getSupportFragmentManager().executePendingTransactions();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
             getSupportFragmentManager().executePendingTransactions();
             getSupportFragmentManager().beginTransaction().add(R.id.ChatListFragment, fragmentChatList).commit();
             getSupportFragmentManager().executePendingTransactions();
-            if (chatFragment.isAdded()) {
-                getSupportFragmentManager().beginTransaction().remove(chatFragment).commit();
-                getSupportFragmentManager().executePendingTransactions();
-                getSupportFragmentManager().beginTransaction().add(R.id.containerLand, chatFragment).commit();
-            }
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             setContentView(R.layout.activity_main);
             getSupportFragmentManager().beginTransaction().remove(fragmentChatList).commit();
@@ -85,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
     private void generateDB(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             //     .fallbackToDestructiveMigration() shitty code
-            myAppDatabase.daoMessage().deleteAll();
-            myAppDatabase.daoUser().deleteAll();
+            // myAppDatabase.daoMessage().deleteAll();
+            //myAppDatabase.daoUser().deleteAll();
             User user = new User("Friend0");
             User user1 = new User("Friend1");
             myAppDatabase.daoUser().addUser(user);
@@ -105,4 +110,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            if(chatFragment.isAdded()){
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragmentChatList).commit();
+            }
+        } else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            super.onBackPressed();
+        }
+    }
 }

@@ -52,11 +52,12 @@ public class ChatFragment extends Fragment {
         int itemPosition = 0;
         if (getArguments() != null)
             // 13 because 1st id is 13(((
-           // itemPosition = getArguments().getInt("position") + 13;
-            itemPosition = getArguments().getInt("position") + 9;
+            //itemPosition = getArguments().getInt("position") + 13;// pixel
+            itemPosition = getArguments().getInt("position") + 1; //samsung
         title = MainActivity.myAppDatabase.daoUser().getName(itemPosition);
 
-        messageChatAdapter = new MessageChatAdapter(view.getContext(), MainActivity.myAppDatabase.daoMessage().getChatByUserId(itemPosition));
+        messageChatAdapter = new MessageChatAdapter(view.getContext(), MainActivity
+                .myAppDatabase.daoMessage().getChatByUserId(itemPosition));
         final ListView lvMain = view.findViewById(R.id.listview_message_list);
         lvMain.setAdapter(messageChatAdapter);
 
@@ -73,7 +74,8 @@ public class ChatFragment extends Fragment {
                         .format(Calendar.getInstance().getTime());
                 Message message = new Message(newMessage, time, TRUE, finalItemPosition);
                 MainActivity.myAppDatabase.daoMessage().addMessage(message);
-                messageChatAdapter.updateList(MainActivity.myAppDatabase.daoMessage().getChatByUserId(finalItemPosition1));
+                messageChatAdapter.updateList(MainActivity.myAppDatabase.daoMessage()
+                        .getChatByUserId(finalItemPosition1));
             }
 
         });
@@ -95,15 +97,19 @@ public class ChatFragment extends Fragment {
 
     @NonNull
     private Runnable notificationSet(final List<User> users) {
-        final NotificationManager notificationManager = (NotificationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.NOTIFICATION_SERVICE);
+        final NotificationManager notificationManager = (NotificationManager) Objects
+                .requireNonNull(getActivity())
+                .getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel notificationChannel = new NotificationChannel("my_channel0", "my_channel", importance);
+            NotificationChannel notificationChannel = new NotificationChannel("my_channel0",
+                    "my_channel", importance);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            notificationChannel.setVibrationPattern(new long[]
+                    {100, 200, 300, 400, 500, 400, 300, 200, 400});
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
@@ -119,18 +125,22 @@ public class ChatFragment extends Fragment {
 
             public void run() {
                 if (!stopMe) {
-                    @SuppressLint("SimpleDateFormat") String date = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-                    Message message = new Message("testNotify #" + (i++ + 1), date, FALSE, finalItemPosition);
+                    @SuppressLint("SimpleDateFormat") String date = new SimpleDateFormat("HH:mm")
+                            .format(Calendar.getInstance().getTime());
+                    Message message = new Message("testNotify #" + (i++ + 1),
+                            date, FALSE, finalItemPosition);
                     MainActivity.myAppDatabase.daoMessage().addMessage(message);
                     if (i > nTimes) {
                         stopMe = true;
                     }
                     builder.setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentTitle("New message from: " + MainActivity.myAppDatabase.daoUser().getName(finalItemPosition))
+                            .setContentTitle("New message from: " + MainActivity.myAppDatabase
+                                    .daoUser().getName(finalItemPosition))
                             .setContentText(message.getMessage());
 
                     notificationManager.notify(1, builder.build());
-                    messageChatAdapter.updateList(MainActivity.myAppDatabase.daoMessage().getChatByUserId(finalItemPosition));
+                    messageChatAdapter.updateList(MainActivity.myAppDatabase.
+                            daoMessage().getChatByUserId(finalItemPosition));
                     h.postDelayed(this, 1000);
 
                 }
@@ -146,15 +156,4 @@ public class ChatFragment extends Fragment {
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // TODO: 24.12.2018 з чату спрацьовує цей метод, з ліста спрацьовує мейнактківіті, дописати для кожного cofiguraton changed
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (chatFragment.isAdded()) {
-                assert getFragmentManager() != null;
-                getFragmentManager().beginTransaction().remove(chatFragment).add(R.id.containerLand, chatFragment).commit();
-            }
-        }
-    }
 }
