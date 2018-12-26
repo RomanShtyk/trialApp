@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class Message {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    @ColumnInfo(name = "message")
+    @ColumnInfo(name = "bubble_out")
     private String message;
     @ColumnInfo(name = "time")
     private String time;

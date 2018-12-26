@@ -47,9 +47,7 @@ public class ChatFragment extends Fragment {
 
         int itemPosition = 0;
         if (getArguments() != null)
-            // 13 because 1st id is 13(((
-            itemPosition = getArguments().getInt("position") + 13;// pixel
-            //itemPosition = getArguments().getInt("position") + 1; //samsung
+            itemPosition = getArguments().getInt("position") + 1;
         title = MainActivity.myAppDatabase.daoUser().getName(itemPosition);
 
         messageChatAdapter = new MessageChatAdapter(view.getContext(), MainActivity
@@ -130,7 +128,7 @@ public class ChatFragment extends Fragment {
                         stopMe = true;
                     }
                     builder.setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentTitle("New message from: " + MainActivity.myAppDatabase
+                            .setContentTitle("New bubble_out from: " + MainActivity.myAppDatabase
                                     .daoUser().getName(finalItemPosition))
                             .setContentText(message.getMessage());
 

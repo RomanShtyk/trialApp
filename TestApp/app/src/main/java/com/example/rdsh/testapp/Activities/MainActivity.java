@@ -3,9 +3,15 @@ package com.example.rdsh.testapp.Activities;
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.example.rdsh.testapp.Data.MyAppDatabase;
 import com.example.rdsh.testapp.Fragments.ChatFragment;
 import com.example.rdsh.testapp.Fragments.ListFragment;
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyAppDatabase myAppDatabase;
 
+
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
@@ -38,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 .fallbackToDestructiveMigration().allowMainThreadQueries().build();
         //generateDB(savedInstanceState);
 
-
         if (savedInstanceState == null) {
             fragmentChatList = new ListFragment();
             chatFragment = new ChatFragment();
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @SuppressLint("CommitTransaction")
     @Override
@@ -81,14 +88,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setActionBarTitle(String title) {
-        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
+        //Objects.requireNonNull(getSupportActionBar()).setTitle(title);
+        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView textView = new TextView(this);
+        textView.setText(title);
+        textView.setTextSize(20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(textView);
     }
+
 
     private void generateDB(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             //     .fallbackToDestructiveMigration() shitty code
-            // myAppDatabase.daoMessage().deleteAll();
-            //myAppDatabase.daoUser().deleteAll();
+            myAppDatabase.daoMessage().deleteAll();
+            myAppDatabase.daoUser().deleteAll();
             User user = new User("Friend0");
             User user1 = new User("Friend1");
             myAppDatabase.daoUser().addUser(user);
@@ -109,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            if(chatFragment.isAdded()){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (chatFragment.isAdded()) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragmentChatList).commit();
             }
-        } else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             super.onBackPressed();
         }
     }
