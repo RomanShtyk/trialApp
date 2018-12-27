@@ -1,4 +1,4 @@
-package com.example.rdsh.testapp.Fragments;
+package com.example.rdsh.testapp.Activities.Main.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.example.rdsh.testapp.Activities.MainActivity;
-import com.example.rdsh.testapp.Adapters.ListAdapter;
+import com.example.rdsh.testapp.Activities.Main.MainActivity;
+import com.example.rdsh.testapp.Activities.Main.Adapters.ListAdapter;
 import com.example.rdsh.testapp.R;
 
 import java.util.Objects;
 
-import static com.example.rdsh.testapp.Activities.MainActivity.chatFragment;
+import static com.example.rdsh.testapp.Activities.Main.MainActivity.chatFragment;
 
 
 public class ListFragment extends Fragment {

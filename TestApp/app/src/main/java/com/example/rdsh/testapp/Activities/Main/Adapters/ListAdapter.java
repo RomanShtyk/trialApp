@@ -1,4 +1,4 @@
-package com.example.rdsh.testapp.Adapters;
+package com.example.rdsh.testapp.Activities.Main.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.rdsh.testapp.Activities.MainActivity;
+import com.example.rdsh.testapp.Activities.Main.MainActivity;
 import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.R;
 
@@ -49,6 +50,7 @@ public class ListAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.layout_chat_list_item, parent, false);
         }
         int userId = position + 1;
+
         User user = getUser(position);
         user.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(userId));
 
@@ -58,6 +60,8 @@ public class ListAdapter extends BaseAdapter {
         else
             ((TextView) view.findViewById(R.id.lastMessage)).setText(user.getChatHistory().get((user.getChatHistory().size() - 1)).getMessage());
         ((TextView) view.findViewById(R.id.time)).setText(user.getChatHistory().get((user.getChatHistory().size() - 1)).getTime());
+        ImageView imageView = view.findViewById(R.id.image);
+        imageView.setImageResource(user.getImage());
         return view;
     }
 

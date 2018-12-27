@@ -9,4 +9,5 @@
     <string name="hello_how_are_you">Hello, how are you??)))</string>
     <string name="time">Time</string>
     <string name="name">Name</string>
+    <string name="todo">TODO</string>
 </resources>

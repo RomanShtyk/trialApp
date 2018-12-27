@@ -1,12 +1,14 @@
-package com.example.rdsh.testapp.Adapters;
+package com.example.rdsh.testapp.Activities.Main.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.rdsh.testapp.Activities.Main.MainActivity;
 import com.example.rdsh.testapp.Data.Message;
 import com.example.rdsh.testapp.R;
 
@@ -56,6 +58,8 @@ public class MessageChatAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.layout_chat_in, parent, false);
             ((TextView) view.findViewById(R.id.message)).setText(messages.get(position).getMessage());
             ((TextView) view.findViewById(R.id.time)).setText(messages.get(position).getTime());
+            ImageView imageView = view.findViewById(R.id.imageChat);
+            imageView.setImageResource(MainActivity.myAppDatabase.daoUser().getUserById(messages.get(0).getUser_id()).getImage());
         }
         return view;
     }

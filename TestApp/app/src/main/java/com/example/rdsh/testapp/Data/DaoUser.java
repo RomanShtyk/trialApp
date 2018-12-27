@@ -21,4 +21,6 @@ public interface DaoUser {
     @Query("DELETE FROM user")
     void deleteAll();
 
+    @Query("SELECT * From user where id = :id")
+    User getUserById(int id);
 }

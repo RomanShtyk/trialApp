@@ -13,8 +13,18 @@ public class User {
     private int id;
     @ColumnInfo(name = "name")
     private String name;
+    @ColumnInfo(name = "image")
+    private int image;
     @Ignore
     private List<Message> chatHistory;
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
+    }
 
     public User(String name) {
         this.name = name;

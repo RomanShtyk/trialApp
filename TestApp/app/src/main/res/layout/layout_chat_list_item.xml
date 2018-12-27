@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/view2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="12dp"
+        app:cardCornerRadius="40dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:contentDescription="@string/todo"
+            android:scaleType="centerCrop"/>
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:id="@+id/userName"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginLeft="181dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/view2"
+
         android:text="@string/name"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         tools:ignore="RtlHardcoded,SmallSp" />
 
     <TextView
@@ -24,26 +43,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/userName"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@+id/view2"
         android:text="@string/hello_how_are_you"
         tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="234dp"
-        android:layout_marginLeft="234dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginLeft="190dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="17dp"
         android:layout_toEndOf="@+id/userName"
         android:layout_toRightOf="@+id/userName"
         android:text="@string/time"
         tools:ignore="RtlHardcoded" />
+
 </RelativeLayout>

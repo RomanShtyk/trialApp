@@ -1,4 +1,4 @@
-package com.example.rdsh.testapp.Fragments;
+package com.example.rdsh.testapp.Activities.Main.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -17,8 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.rdsh.testapp.Activities.MainActivity;
-import com.example.rdsh.testapp.Adapters.MessageChatAdapter;
+import com.example.rdsh.testapp.Activities.Main.MainActivity;
+import com.example.rdsh.testapp.Activities.Main.Adapters.MessageChatAdapter;
 import com.example.rdsh.testapp.Data.Message;
 import com.example.rdsh.testapp.R;
 
@@ -26,8 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
-import static com.example.rdsh.testapp.Activities.MainActivity.FALSE;
-import static com.example.rdsh.testapp.Activities.MainActivity.TRUE;
+import static com.example.rdsh.testapp.Activities.Main.MainActivity.FALSE;
+import static com.example.rdsh.testapp.Activities.Main.MainActivity.TRUE;
 
 public class ChatFragment extends Fragment {
 

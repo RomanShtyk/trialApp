@@ -1,4 +1,4 @@
-package com.example.rdsh.testapp.Activities;
+package com.example.rdsh.testapp.Activities.Main;
 
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rdsh.testapp.Data.MyAppDatabase;
-import com.example.rdsh.testapp.Fragments.ChatFragment;
-import com.example.rdsh.testapp.Fragments.ListFragment;
+import com.example.rdsh.testapp.Activities.Main.Fragments.ChatFragment;
+import com.example.rdsh.testapp.Activities.Main.Fragments.ListFragment;
 import com.example.rdsh.testapp.Data.Message;
 import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.MyApplication;
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setActionBarTitle(String title) {
-        //Objects.requireNonNull(getSupportActionBar()).setTitle(title);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView textView = new TextView(this);
@@ -105,11 +104,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateDB(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            //     .fallbackToDestructiveMigration() shitty code
+            //.fallbackToDestructiveMigration() shitty code
             myAppDatabase.daoMessage().deleteAll();
             myAppDatabase.daoUser().deleteAll();
-            User user = new User("Friend0");
-            User user1 = new User("Friend1");
+            User user = new User("friend0");
+            User user1 = new User("friend1");
+            user.setImage(R.drawable.friend0);
+            user1.setImage(R.drawable.friend1);
             myAppDatabase.daoUser().addUser(user);
             myAppDatabase.daoUser().addUser(user1);
             List<User> users = myAppDatabase.daoUser().getAll();
