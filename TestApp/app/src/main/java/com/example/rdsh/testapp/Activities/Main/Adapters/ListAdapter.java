@@ -13,6 +13,7 @@ import com.example.rdsh.testapp.Activities.Main.MainActivity;
 import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.R;
 
+import java.util.Date;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
@@ -41,7 +42,7 @@ public class ListAdapter extends BaseAdapter {
         return position;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -49,17 +50,20 @@ public class ListAdapter extends BaseAdapter {
         if (view == null) {
             view = lInflater.inflate(R.layout.layout_chat_list_item, parent, false);
         }
-        int userId = position + 1;
-
         User user = getUser(position);
-        user.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(userId));
 
         ((TextView) view.findViewById(R.id.userName)).setText(user.getName());
         if (user.getChatHistory().get((user.getChatHistory().size() - 1)).getIsFromMe() == 1)
-            ((TextView) view.findViewById(R.id.lastMessage)).setText("me:" + user.getChatHistory().get((user.getChatHistory().size() - 1)).getMessage());
+            ((TextView) view.findViewById(R.id.lastMessage)).setText("me:" + user.getChatHistory()
+                    .get((user.getChatHistory().size() - 1)).getMessage());
         else
-            ((TextView) view.findViewById(R.id.lastMessage)).setText(user.getChatHistory().get((user.getChatHistory().size() - 1)).getMessage());
-        ((TextView) view.findViewById(R.id.time)).setText(user.getChatHistory().get((user.getChatHistory().size() - 1)).getTime());
+            ((TextView) view.findViewById(R.id.lastMessage)).setText(user.getChatHistory()
+                    .get((user.getChatHistory().size() - 1)).getMessage());
+
+        Date date = new Date(user.getChatHistory()
+                .get((user.getChatHistory().size() - 1)).getTime());
+
+        ((TextView) view.findViewById(R.id.time)).setText(MainActivity.formatForDateNow.format(date));
         ImageView imageView = view.findViewById(R.id.image);
         imageView.setImageResource(user.getImage());
         return view;

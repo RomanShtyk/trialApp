@@ -21,7 +21,7 @@ import com.example.rdsh.testapp.MyApplication;
 import com.example.rdsh.testapp.R;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,17 +33,22 @@ public class MainActivity extends AppCompatActivity {
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
-    private static ListFragment fragmentChatList;
+    public static ListFragment fragmentChatList;
     @SuppressLint("StaticFieldLeak")
     public static ChatFragment chatFragment;
 
+    public static SimpleDateFormat formatForDateNow;
+
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        formatForDateNow = new SimpleDateFormat("hh:mm");
+        //.fallbackToDestructiveMigration() bad practise
         myAppDatabase = Room.databaseBuilder(MyApplication.getAppContext(), MyAppDatabase.class, "chatApp")
                 .fallbackToDestructiveMigration().allowMainThreadQueries().build();
-        //generateDB(savedInstanceState);
+        generateDB(savedInstanceState);
 
         if (savedInstanceState == null) {
             fragmentChatList = new ListFragment();
@@ -51,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container, fragmentChatList).commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.ChatListFragment, fragmentChatList).commit();
             }
         }
     }
@@ -64,9 +72,22 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             getSupportFragmentManager().beginTransaction().remove(fragmentChatList).commit();
             if (chatFragment.isAdded()) {
+//                Bundle bundle = new Bundle();
+//                int itemPosition = 0;
+//                if (chatFragment.getArguments() != null)
+//                    itemPosition = chatFragment.getArguments().getInt("position");
+//
+//                List<User> users = MainActivity.myAppDatabase.daoUser().getAll();
+//                for (User u : users) {
+//                    u.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(u.getId()));
+//                }
+//                List<User> sortedList = ListFragment.sort(users);
+//                int position = sortedList.get(itemPosition).getId() - 1;
                 findViewById(R.id.tvChooseChat).setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction().remove(chatFragment).commit();
                 getSupportFragmentManager().executePendingTransactions();
+                // bundle.putInt("position", position);
+                // chatFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
@@ -94,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(title);
         textView.setTextSize(20);
         textView.setTypeface(null, Typeface.BOLD);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER);
         textView.setTextColor(getResources().getColor(R.color.white));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -104,26 +125,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateDB(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            //.fallbackToDestructiveMigration() shitty code
-            myAppDatabase.daoMessage().deleteAll();
-            myAppDatabase.daoUser().deleteAll();
-            User user = new User("friend0");
-            User user1 = new User("friend1");
-            user.setImage(R.drawable.friend0);
-            user1.setImage(R.drawable.friend1);
-            myAppDatabase.daoUser().addUser(user);
-            myAppDatabase.daoUser().addUser(user1);
-            List<User> users = myAppDatabase.daoUser().getAll();
-            @SuppressLint("SimpleDateFormat") String time = new SimpleDateFormat("HH:mm")
-                    .format(Calendar.getInstance().getTime());
-            Message message = new Message("Hi!", time, TRUE, users.get(0).getId());
-            Message message1 = new Message("Hi!", time, FALSE, users.get(0).getId());
-            Message message2 = new Message("Hi!", time, TRUE, users.get(1).getId());
-            Message message3 = new Message("Hi!", time, FALSE, users.get(1).getId());
-            myAppDatabase.daoMessage().addMessage(message);
-            myAppDatabase.daoMessage().addMessage(message1);
-            myAppDatabase.daoMessage().addMessage(message2);
-            myAppDatabase.daoMessage().addMessage(message3);
+            //myAppDatabase.daoMessage().deleteAll();
+            //myAppDatabase.daoUser().deleteAll();
+            if (myAppDatabase.daoUser().getAll().size() == 0) {
+                User user = new User("friend0");
+                User user1 = new User("friend1");
+                user.setImage(R.drawable.friend0);
+                user1.setImage(R.drawable.friend1);
+                myAppDatabase.daoUser().addUser(user);
+                myAppDatabase.daoUser().addUser(user1);
+                List<User> users = myAppDatabase.daoUser().getAll();
+                long time = new Date().getTime();
+
+                Message message = new Message("Hi!", time, TRUE, users.get(0).getId());
+                Message message1 = new Message("Hi!", time, FALSE, users.get(0).getId());
+                Message message2 = new Message("Hi!", time, TRUE, users.get(1).getId());
+                Message message3 = new Message("Hi!", time, FALSE, users.get(1).getId());
+                myAppDatabase.daoMessage().addMessage(message);
+                myAppDatabase.daoMessage().addMessage(message1);
+                myAppDatabase.daoMessage().addMessage(message2);
+                myAppDatabase.daoMessage().addMessage(message3);
+            }
         }
     }
 

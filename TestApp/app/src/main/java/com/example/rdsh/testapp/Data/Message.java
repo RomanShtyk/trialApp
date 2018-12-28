@@ -11,13 +11,13 @@ public class Message {
     @ColumnInfo(name = "bubble_out")
     private String message;
     @ColumnInfo(name = "time")
-    private String time;
+    private long time;
     @ColumnInfo(name = "isfromme")
     private int isFromMe;
     @ColumnInfo(name = "userid")
     private int user_id;
 
-    public Message(String message, String time, int isFromMe, int user_id) {
+    public Message(String message, long time, int isFromMe, int user_id) {
         this.message = message;
         this.time = time;
         this.isFromMe = isFromMe;
@@ -40,11 +40,11 @@ public class Message {
         this.message = message;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,14 +21,17 @@ import android.widget.ListView;
 import com.example.rdsh.testapp.Activities.Main.MainActivity;
 import com.example.rdsh.testapp.Activities.Main.Adapters.MessageChatAdapter;
 import com.example.rdsh.testapp.Data.Message;
+import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.example.rdsh.testapp.Activities.Main.MainActivity.FALSE;
 import static com.example.rdsh.testapp.Activities.Main.MainActivity.TRUE;
+import static com.example.rdsh.testapp.Activities.Main.MainActivity.chatFragment;
+import static com.example.rdsh.testapp.Activities.Main.MainActivity.fragmentChatList;
 
 public class ChatFragment extends Fragment {
 
@@ -37,7 +41,9 @@ public class ChatFragment extends Fragment {
 
     private EditText creatorEd;
 
-    private int finalItemPosition = -1;
+    private List<User> sortedList;
+
+    private int finalItemPosition1;
 
 
     @Override
@@ -47,32 +53,25 @@ public class ChatFragment extends Fragment {
 
         int itemPosition = 0;
         if (getArguments() != null)
-            itemPosition = getArguments().getInt("position") + 1;
-        title = MainActivity.myAppDatabase.daoUser().getName(itemPosition);
+            itemPosition = getArguments().getInt("position");
+        List<User> users = MainActivity.myAppDatabase.daoUser().getAll();
+        for (User u : users) {
+            u.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(u.getId()));
+        }
+        sortedList = ListFragment.sort(users);
+        title = sortedList.get(itemPosition).getName();
 
-        messageChatAdapter = new MessageChatAdapter(view.getContext(), MainActivity
-                .myAppDatabase.daoMessage().getChatByUserId(itemPosition));
+        messageChatAdapter = new MessageChatAdapter(view.getContext(), sortedList.get(itemPosition).getChatHistory());
         final ListView lvMain = view.findViewById(R.id.listview_message_list);
         lvMain.setAdapter(messageChatAdapter);
+        finalItemPosition1 = itemPosition;
+        uiInit(view);
+        return view;
+    }
 
+    private void uiInit(View view) {
         Button sendButton = view.findViewById(R.id.button_chatbox_send);
         creatorEd = view.findViewById(R.id.edittext_chatbox);
-        finalItemPosition = itemPosition;
-        final int finalItemPosition1 = itemPosition;
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newMessage = creatorEd.getText().toString();
-                creatorEd.setText("");
-                @SuppressLint("SimpleDateFormat") String time = new SimpleDateFormat("HH:mm")
-                        .format(Calendar.getInstance().getTime());
-                Message message = new Message(newMessage, time, TRUE, finalItemPosition);
-                MainActivity.myAppDatabase.daoMessage().addMessage(message);
-                messageChatAdapter.updateList(MainActivity.myAppDatabase.daoMessage()
-                        .getChatByUserId(finalItemPosition1));
-            }
-
-        });
 
         //notification test
         final Runnable run = notificationSet();
@@ -81,12 +80,35 @@ public class ChatFragment extends Fragment {
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("position", 0);
+                chatFragment.setArguments(bundle);
                 run.run();
             }
 
         });
 
-        return view;
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("CommitTransaction")
+            @Override
+            public void onClick(View v) {
+                String newMessage = creatorEd.getText().toString();
+                creatorEd.setText("");
+                long time = new Date().getTime();
+                Message message = new Message(newMessage, time, TRUE, sortedList.get(finalItemPosition1).getId());
+                MainActivity.myAppDatabase.daoMessage().addMessage(message);
+                messageChatAdapter.updateList(MainActivity.myAppDatabase.daoMessage()
+                        .getChatByUserId(sortedList.get(finalItemPosition1).getId()));
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    Objects.requireNonNull(getFragmentManager()).beginTransaction().detach(fragmentChatList)
+                            .attach(fragmentChatList).commit();
+                }
+                Bundle bundle = new Bundle();
+                    bundle.putInt("position", 0);
+                    chatFragment.setArguments(bundle);
+            }
+
+        });
     }
 
     @NonNull
@@ -119,22 +141,24 @@ public class ChatFragment extends Fragment {
 
             public void run() {
                 if (!stopMe) {
-                    @SuppressLint("SimpleDateFormat") String date = new SimpleDateFormat("HH:mm")
-                            .format(Calendar.getInstance().getTime());
+                    long date = new Date().getTime();
                     Message message = new Message("testNotify #" + (i++ + 1),
-                            date, FALSE, finalItemPosition);
+                            date, FALSE, sortedList.get(finalItemPosition1).getId());
                     MainActivity.myAppDatabase.daoMessage().addMessage(message);
                     if (i > nTimes) {
                         stopMe = true;
                     }
                     builder.setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentTitle("New bubble_out from: " + MainActivity.myAppDatabase
-                                    .daoUser().getName(finalItemPosition))
+                            .setContentTitle("New bubble_out from: " + sortedList.get(finalItemPosition1).getName())
                             .setContentText(message.getMessage());
 
                     notificationManager.notify(1, builder.build());
-                    messageChatAdapter.updateList(MainActivity.myAppDatabase.
-                            daoMessage().getChatByUserId(finalItemPosition));
+                    messageChatAdapter.updateList(MainActivity.myAppDatabase.daoMessage()
+                            .getChatByUserId(sortedList.get(finalItemPosition1).getId()));
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        Objects.requireNonNull(getFragmentManager()).beginTransaction().detach(fragmentChatList)
+                                .attach(fragmentChatList).commit();
+                    }
                     h.postDelayed(this, 1000);
 
                 }

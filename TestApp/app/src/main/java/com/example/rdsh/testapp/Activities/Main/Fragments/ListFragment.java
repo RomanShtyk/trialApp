@@ -10,10 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.example.rdsh.testapp.Activities.Main.MainActivity;
 import com.example.rdsh.testapp.Activities.Main.Adapters.ListAdapter;
+import com.example.rdsh.testapp.Data.User;
 import com.example.rdsh.testapp.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static com.example.rdsh.testapp.Activities.Main.MainActivity.chatFragment;
@@ -25,11 +29,15 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
-
-        ListAdapter listAdapter = new ListAdapter(view.getContext(), MainActivity.myAppDatabase.daoUser().getAll());
+        List<User> users = MainActivity.myAppDatabase.daoUser().getAll();
+        for (User u : users) {
+            u.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(u.getId()));
+        }
+        //The list for descend sort by time list_View of users
+        final List<User> sortedList = sort(users);
+        ListAdapter listAdapter = new ListAdapter(view.getContext(), sortedList);
         ListView lvMain = view.findViewById(R.id.list_view);
         lvMain.setAdapter(listAdapter);
-
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("CommitTransaction")
@@ -60,6 +68,24 @@ public class ListFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public static List<User> sort(List<User> users) {
+        List<User> sortedList = new ArrayList<>();
+        int size = users.size();
+        for (int i = 0; i < size; i++) {
+            int currentMax = 0;
+            long currentLong = 0;
+            for (int j = 0; j < size - i; j++) {
+                if (users.get(j).getChatHistory().get(users.get(j).getChatHistory().size() - 1).getTime() > currentLong) {
+                    currentLong = users.get(j).getChatHistory().get(users.get(j).getChatHistory().size() - 1).getTime();
+                    currentMax = j;
+                }
+            }
+            sortedList.add(users.get(currentMax));
+            users.remove(currentMax);
+        }
+        return sortedList;
     }
 
     public void onResume() {
