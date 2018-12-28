@@ -72,22 +72,9 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             getSupportFragmentManager().beginTransaction().remove(fragmentChatList).commit();
             if (chatFragment.isAdded()) {
-//                Bundle bundle = new Bundle();
-//                int itemPosition = 0;
-//                if (chatFragment.getArguments() != null)
-//                    itemPosition = chatFragment.getArguments().getInt("position");
-//
-//                List<User> users = MainActivity.myAppDatabase.daoUser().getAll();
-//                for (User u : users) {
-//                    u.setChatHistory(MainActivity.myAppDatabase.daoMessage().getChatByUserId(u.getId()));
-//                }
-//                List<User> sortedList = ListFragment.sort(users);
-//                int position = sortedList.get(itemPosition).getId() - 1;
                 findViewById(R.id.tvChooseChat).setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction().remove(chatFragment).commit();
                 getSupportFragmentManager().executePendingTransactions();
-                // bundle.putInt("position", position);
-                // chatFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
                 getSupportFragmentManager().executePendingTransactions();
             }

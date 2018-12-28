@@ -61,7 +61,8 @@ public class ChatFragment extends Fragment {
         sortedList = ListFragment.sort(users);
         title = sortedList.get(itemPosition).getName();
 
-        messageChatAdapter = new MessageChatAdapter(view.getContext(), sortedList.get(itemPosition).getChatHistory());
+        messageChatAdapter = new MessageChatAdapter(view.getContext(), sortedList.get(itemPosition)
+                .getChatHistory());
         final ListView lvMain = view.findViewById(R.id.listview_message_list);
         lvMain.setAdapter(messageChatAdapter);
         finalItemPosition1 = itemPosition;
